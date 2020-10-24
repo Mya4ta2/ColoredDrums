@@ -12,7 +12,7 @@ public class Ball extends Actor {
     private Sprite circle;
     private Vector2 position = new Vector2();
 
-    private boolean drumColorEqualsBallColor = false;
+    private boolean drumColorEqualsBallColor = true;
 
     private float rotationRadius;
     private float rotationSpeed;

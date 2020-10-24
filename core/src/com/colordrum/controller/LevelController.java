@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 public class LevelController implements InputProcessor {
 
+    private boolean menuMode = false;
+
     private Level level;
 
     //time
@@ -31,28 +33,31 @@ public class LevelController implements InputProcessor {
             level.getBalls()[i].rotate();
         }
 
-        for (int i = 0; i < level.getDrums().length; i++) {
-            if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
-                level.getDrums()[i].setDrumColorEqualsBallColor(true);
-            } else {
-                level.getDrums()[i].setDrumColorEqualsBallColor(false);
-            }
-        }
-
-
-        colorChangeTimer += Gdx.graphics.getDeltaTime();
-        currentTimer += Gdx.graphics.getDeltaTime();
-
-        if (colorChangeTimer >= level.colorChangeSpeed) {
-
+        if (!menuMode) {
             for (int i = 0; i < level.getDrums().length; i++) {
-                changeBallsColor(level.getBalls()[i]);
+                if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
+                    level.getDrums()[i].setDrumColorEqualsBallColor(true);
+                } else {
+                    level.getDrums()[i].setDrumColorEqualsBallColor(false);
+                }
             }
 
-            colorChangeTimer = 0;
-        }
+
+            colorChangeTimer += Gdx.graphics.getDeltaTime();
+            currentTimer += Gdx.graphics.getDeltaTime();
+
+            if (colorChangeTimer >= level.colorChangeSpeed) {
+
+                for (int i = 0; i < level.getDrums().length; i++) {
+                    changeBallsColor(level.getBalls()[i]);
+                }
+
+                colorChangeTimer = 0;
+            }
+
 
         level.setPlayTime(currentTimer);
+        }
     }
 
     public void processInput() {
@@ -107,5 +112,13 @@ public class LevelController implements InputProcessor {
 
     public int getRandomNum(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
+    }
+
+    public boolean isMenuMode() {
+        return menuMode;
+    }
+
+    public void setMenuMode(boolean menuMode) {
+        this.menuMode = menuMode;
     }
 }

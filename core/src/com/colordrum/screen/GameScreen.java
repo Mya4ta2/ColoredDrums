@@ -7,6 +7,8 @@ import com.colordrum.view.LevelRenderer;
 
 public class GameScreen implements Screen {
 
+    private boolean isStart;
+
     private Level level;
     private LevelRenderer renderer;
     private LevelController controller;
@@ -48,5 +50,13 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
     }
 }

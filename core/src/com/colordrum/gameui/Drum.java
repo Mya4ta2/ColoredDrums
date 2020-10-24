@@ -12,7 +12,7 @@ public class Drum extends Actor {
     private Sprite circle;
     private Ball ball;
 
-    private boolean drumColorEqualsBallColor = false;
+    private boolean drumColorEqualsBallColor = true;
 
     public Drum(Texture circle) {
         this.circle = new Sprite(circle);

@@ -3,7 +3,6 @@ package com.colordrum.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +13,8 @@ import com.colordrum.Vars;
 import com.colordrum.level.Level;
 
 public class LevelRenderer {
+
+    private boolean menuMode = false;
 
     private Level level;
     private OrthographicCamera camera;
@@ -52,9 +53,11 @@ public class LevelRenderer {
         stage.act();
         stage.draw();
 
-        batch.begin();
-        font.draw(batch, String.valueOf(level.getPlayTime()), 100, 100);
-        batch.end();
+        if (!menuMode) {
+            batch.begin();
+            font.draw(batch, String.valueOf(level.getPlayTime()), 100, 100);
+            batch.end();
+        }
 
         camera.update();
         viewport.apply();
@@ -62,5 +65,13 @@ public class LevelRenderer {
 
     public void resize(int width, int height) {
         viewport.update(width, height);
+    }
+
+    public boolean isMenuMode() {
+        return menuMode;
+    }
+
+    public void setMenuMode(boolean menuMode) {
+        this.menuMode = menuMode;
     }
 }
