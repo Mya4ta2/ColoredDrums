@@ -32,14 +32,13 @@ public class LevelController implements InputProcessor {
         }
 
         for (int i = 0; i < level.getDrums().length; i++) {
-            if (!ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getBalls()[i].getColor())) {
+            if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
+                level.getDrums()[i].setDrumColorEqualsBallColor(true);
+            } else {
                 level.getDrums()[i].setDrumColorEqualsBallColor(false);
             }
-
-            if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getBalls()[i].getColor())) {
-                level.getDrums()[i].setDrumColorEqualsBallColor(true);
-            }
         }
+
 
         colorChangeTimer += Gdx.graphics.getDeltaTime();
         currentTimer += Gdx.graphics.getDeltaTime();
@@ -47,12 +46,9 @@ public class LevelController implements InputProcessor {
         if (colorChangeTimer >= level.colorChangeSpeed) {
 
             for (int i = 0; i < level.getDrums().length; i++) {
-                if (level.getDrums()[i].isDrumColorEqualsBallColor()) {
-                    level.getDrums()[i].getBall().setColor(Color.YELLOW);
-                } else {
-                    changeBallsColor(level.getBalls()[i]);
-                }
+                changeBallsColor(level.getBalls()[i]);
             }
+
             colorChangeTimer = 0;
         }
 

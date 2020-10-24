@@ -8,10 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Color;
 
 public class Ball extends Actor {
-
     private Color color;
     private Sprite circle;
     private Vector2 position = new Vector2();
+
+    private boolean drumColorEqualsBallColor = false;
 
     private float rotationRadius;
     private float rotationSpeed;
@@ -53,7 +54,12 @@ public class Ball extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        circle.setColor(color);
+        if (!drumColorEqualsBallColor) {
+            circle.setColor(Color.CLEAR);
+        } else {
+            circle.setColor(color);
+        }
+
         circle.setPosition(getX(), getY());
         circle.setSize(getWidth(), getHeight());
         circle.draw(batch);
@@ -102,5 +108,13 @@ public class Ball extends Actor {
 
     public void setRotationAngle(float rotationAngle) {
         this.rotationAngle = rotationAngle;
+    }
+
+    public boolean isDrumColorEqualsBallColor() {
+        return drumColorEqualsBallColor;
+    }
+
+    public void setDrumColorEqualsBallColor(boolean drumColorNotEqualsBallColor) {
+        this.drumColorEqualsBallColor = drumColorNotEqualsBallColor;
     }
 }

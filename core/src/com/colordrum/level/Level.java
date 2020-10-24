@@ -40,9 +40,9 @@ public class Level {
         drums[1].setColor(ColorUtil.Colors.RED.getColor());
         drums[0].setColor(ColorUtil.Colors.BLUE.getColor());
 
-        balls[2].setRotationRadius(35);
+        balls[0].setRotationRadius(35);
         balls[1].setRotationRadius(90);
-        balls[0].setRotationRadius(145);
+        balls[2].setRotationRadius(145);
     }
 
     public void resize(int width, int height) {

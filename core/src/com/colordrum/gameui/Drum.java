@@ -38,6 +38,8 @@ public class Drum extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        ball.setDrumColorEqualsBallColor(drumColorEqualsBallColor);
+
         circle.setColor(color);
         circle.setPosition(getX() - getWidth() / 2, getY() - getHeight() / 2);
         circle.setSize(getWidth(), getHeight());
