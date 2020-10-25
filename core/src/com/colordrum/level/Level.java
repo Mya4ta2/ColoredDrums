@@ -14,6 +14,7 @@ public class Level {
 
     private Ball[] balls = new Ball[drumsAmount];
     private Drum[] drums = new Drum[drumsAmount];
+    private int[] radius = new int[drumsAmount];
 
     private Texture texture;
     private Texture star;
@@ -42,9 +43,13 @@ public class Level {
         drums[1].setColor(ColorUtil.Colors.RED.getColor());
         drums[0].setColor(ColorUtil.Colors.BLUE.getColor());
 
-        balls[0].setRotationRadius(35);
-        balls[1].setRotationRadius(90);
-        balls[2].setRotationRadius(145);
+        radius[0] = 35;
+        radius[1] = 90;
+        radius[2] = 145;
+
+        balls[0].setRotationRadius(radius[0]);
+        balls[1].setRotationRadius(radius[1]);
+        balls[2].setRotationRadius(radius[2]);
     }
 
     public void resize(int width, int height) {
@@ -60,6 +65,10 @@ public class Level {
 
     public Drum[] getDrums() {
         return drums;
+    }
+
+    public int[] getRadius() {
+        return radius;
     }
 
     public int getRandomNum(int min, int max) {

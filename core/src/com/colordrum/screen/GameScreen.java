@@ -1,6 +1,7 @@
 package com.colordrum.screen;
 
 import com.badlogic.gdx.Screen;
+import com.colordrum.Game;
 import com.colordrum.controller.LevelController;
 import com.colordrum.level.Level;
 import com.colordrum.view.LevelRenderer;
@@ -9,15 +10,21 @@ public class GameScreen implements Screen {
 
     private boolean isStart;
 
+    private Game game;
+
     private Level level;
     private LevelRenderer renderer;
     private LevelController controller;
+
+    public GameScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
         level = new Level();
         renderer = new LevelRenderer(level);
-        controller = new LevelController(level);
+        controller = new LevelController(level, game);
     }
 
     @Override

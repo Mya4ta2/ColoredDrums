@@ -22,7 +22,8 @@ public class MenuScreen implements Screen {
     private LevelRenderer renderer;
     private LevelController controller;
 
-    private InputMultiplexer multiplexer;
+    private InputMultiplexer gameMultiplexer;
+    private InputMultiplexer menuMultiplexer;
 
     private Game game;
 
@@ -34,7 +35,7 @@ public class MenuScreen implements Screen {
     public void show() {
         level = new Level();
         renderer = new LevelRenderer(level);
-        controller = new LevelController(level);
+        controller = new LevelController(level, game);
 
         renderer.setMenuMode(true);
         controller.setMenuMode(true);
@@ -43,8 +44,10 @@ public class MenuScreen implements Screen {
         level.getBalls()[1].setColor(ColorUtil.darkenColor(ColorUtil.Colors.RED.getColor(), 0.1f));
         level.getBalls()[2].setColor(ColorUtil.darkenColor(ColorUtil.Colors.GREEN.getColor(), 0.1f));
 
-        multiplexer = new InputMultiplexer(renderer.getStage(), controller);
-        Gdx.input.setInputProcessor(multiplexer);
+        menuMultiplexer = new InputMultiplexer(renderer.getStage());
+        gameMultiplexer = new InputMultiplexer(controller);
+
+        Gdx.input.setInputProcessor(menuMultiplexer);
     }
 
     @Override
@@ -53,10 +56,16 @@ public class MenuScreen implements Screen {
         controller.update();
 
         if (renderer.isStartRequired()) {
-            GameScreen gameScreen = new GameScreen();
+            GameScreen gameScreen = new GameScreen(game);
 
             game.setScreen(gameScreen);
             isStart = true;
+        }
+
+        if (isStart) {
+            Gdx.input.setInputProcessor(gameMultiplexer);
+        } else {
+            Gdx.input.setInputProcessor(menuMultiplexer);
         }
     }
 
