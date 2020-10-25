@@ -16,16 +16,18 @@ public class Level {
     private Drum[] drums = new Drum[drumsAmount];
 
     private Texture texture;
+    private Texture star;
 
     public Level() {
         texture = new Texture("circle.png");
+        star = new Texture("star.png");
 
         createLevel();
     }
 
     public void createLevel() {
         for (int i = 0; i < drumsAmount; i++) {
-            balls[i] = new Ball(texture);
+            balls[i] = new Ball(texture, star);
             balls[i].setColor(ColorUtil.darkenColor(ColorUtil.Colors.values()[getRandomNum(0,ColorUtil.Colors.values().length)].getColor(), 0.1f));
             balls[i].setRotationAngle(i*90);
             balls[i].setRotationSpeed(1);

@@ -10,16 +10,19 @@ import com.badlogic.gdx.graphics.Color;
 public class Ball extends Actor {
     private Color color;
     private Sprite circle;
+    private Sprite star;
     private Vector2 position = new Vector2();
 
     private boolean drumColorEqualsBallColor = true;
+    private boolean priority;
 
     private float rotationRadius;
     private float rotationSpeed;
     private float rotationAngle;
 
-    public Ball(Texture circle) {
+    public Ball(Texture circle, Texture star) {
         this.circle = new Sprite(circle);
+        this.star = new Sprite(star);
 
         setDefaultColor();
         setDefaultPos();
@@ -54,15 +57,18 @@ public class Ball extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (!drumColorEqualsBallColor) {
-            circle.setColor(Color.CLEAR);
-        } else {
-            circle.setColor(color);
-        }
-
+        circle.setColor(color);
         circle.setPosition(getX(), getY());
         circle.setSize(getWidth(), getHeight());
         circle.draw(batch);
+
+        star.setColor(Color.YELLOW);
+        star.setPosition(getX() + getWidth() / 2 - star.getWidth() / 2, getY() + getHeight() / 2 - star.getHeight() / 2);
+        star.setSize(getWidth() / 1.5f, getHeight() / 1.5f);
+
+        if (priority) {
+            star.draw(batch);
+        }
 
         super.draw(batch, parentAlpha);
     }
@@ -116,5 +122,13 @@ public class Ball extends Actor {
 
     public void setDrumColorEqualsBallColor(boolean drumColorNotEqualsBallColor) {
         this.drumColorEqualsBallColor = drumColorNotEqualsBallColor;
+    }
+
+    public boolean isPriority() {
+        return priority;
+    }
+
+    public void setPriority(boolean priority) {
+        this.priority = priority;
     }
 }

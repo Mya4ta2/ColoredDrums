@@ -1,6 +1,7 @@
 package com.colordrum.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.colordrum.ColorUtil;
@@ -11,9 +12,17 @@ import java.util.Arrays;
 
 public class LevelController implements InputProcessor {
 
+    public enum ControllerMode {
+        SENSOR, KEYBOARD
+    }
+
     private boolean menuMode = false;
 
     private Level level;
+
+    //ball control
+    private ControllerMode controllerMode = ControllerMode.KEYBOARD;
+    private int ballNum;
 
     //time
     private float currentTimer;
@@ -61,7 +70,39 @@ public class LevelController implements InputProcessor {
     }
 
     public void processInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            level.getBalls()[ballNum].setRotationRadius(100);
+        }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            if (ballNum < level.getBalls().length-1) {
+                ballNum++;
+                level.getBalls()[ballNum].setPriority(true);
+            } else if (ballNum >= level.getBalls().length-1) {
+                ballNum = 0;
+                level.getBalls()[ballNum].setPriority(true);
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            if (ballNum > 0) {
+                ballNum--;
+                level.getBalls()[ballNum].setPriority(true);
+            } else if (ballNum <= 0) {
+                ballNum = level.getBalls().length-1;
+                level.getBalls()[ballNum].setPriority(true);
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            level.getBalls()[ballNum].setRotationRadius(30);
+        }
+
+        for (int i = 0; i < level.getBalls().length; i++) {
+            if (level.getBalls()[i] != level.getBalls()[ballNum]) {
+                level.getBalls()[i].setPriority(false);
+            }
+        }
     }
 
     public void changeBallsColor(Ball ball) {
@@ -120,5 +161,13 @@ public class LevelController implements InputProcessor {
 
     public void setMenuMode(boolean menuMode) {
         this.menuMode = menuMode;
+    }
+
+    public ControllerMode getControllerMode() {
+        return controllerMode;
+    }
+
+    public void setControllerMode(ControllerMode controllerMode) {
+        this.controllerMode = controllerMode;
     }
 }
