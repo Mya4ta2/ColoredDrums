@@ -12,6 +12,8 @@ public class Drum extends Actor {
     private Sprite circle;
     private Ball ball;
 
+    private float rotationRadius;
+
     private boolean drumColorEqualsBallColor = true;
 
     public Drum(Texture circle) {
@@ -71,5 +73,13 @@ public class Drum extends Actor {
 
     public void setDrumColorEqualsBallColor(boolean drumColorNotEqualsBallColor) {
         this.drumColorEqualsBallColor = drumColorNotEqualsBallColor;
+    }
+
+    public float getRotationRadius() {
+        return rotationRadius;
+    }
+
+    public void setRotationRadius(float rotationRadius) {
+        this.rotationRadius = rotationRadius;
     }
 }

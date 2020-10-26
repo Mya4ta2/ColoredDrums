@@ -29,7 +29,6 @@ public class Level {
     public void createLevel() {
         for (int i = 0; i < drumsAmount; i++) {
             balls[i] = new Ball(texture, star);
-            balls[i].setColor(ColorUtil.darkenColor(ColorUtil.Colors.values()[getRandomNum(0,ColorUtil.Colors.values().length)].getColor(), 0.1f));
             balls[i].setRotationAngle(i*90);
             balls[i].setRotationSpeed(1);
 
@@ -50,6 +49,14 @@ public class Level {
         balls[0].setRotationRadius(radius[0]);
         balls[1].setRotationRadius(radius[1]);
         balls[2].setRotationRadius(radius[2]);
+
+        balls[0].setColor(ColorUtil.darkenColor(ColorUtil.Colors.GREEN.getColor(), 0.1f));
+        balls[1].setColor(ColorUtil.darkenColor(ColorUtil.Colors.RED.getColor(), 0.1f));
+        balls[2].setColor(ColorUtil.darkenColor(ColorUtil.Colors.BLUE.getColor(), 0.1f));
+
+        drums[0].setRotationRadius(radius[0]);
+        drums[1].setRotationRadius(radius[1]);
+        drums[2].setRotationRadius(radius[2]);
     }
 
     public void resize(int width, int height) {

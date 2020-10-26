@@ -46,6 +46,16 @@ public class LevelController implements InputProcessor {
             level.getBalls()[i].rotate();
         }
 
+        for(int j = 0; j < level.getBalls().length; j++) {
+            for (int j2 = 0; j2 < level.getDrums().length; j2++) {
+                if (j2 == j) continue;
+                if (level.getDrums()[j2].getRotationRadius() == level.getBalls()[j].getRotationRadius()) {
+                    level.getDrums()[j2].setBall(level.getBalls()[j]);
+                    break;
+                }
+            }
+        }
+
         if (!menuMode) {
             for (int i = 0; i < level.getDrums().length; i++) {
                 if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
@@ -68,6 +78,7 @@ public class LevelController implements InputProcessor {
                 for (int i = 0; i < level.getDrums().length; i++) {
                     if (!level.getDrums()[i].isDrumColorEqualsBallColor()) {
                         gameOver();
+                        System.out.println(i);
                     }
                 }
 
