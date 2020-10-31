@@ -78,6 +78,12 @@ public class Level {
         return radius;
     }
 
+    public void rotateAllBalls() {
+        for (int i = 0; i < getBalls().length; i++) {
+            getBalls()[i].rotate();
+        }
+    }
+
     public int getRandomNum(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }

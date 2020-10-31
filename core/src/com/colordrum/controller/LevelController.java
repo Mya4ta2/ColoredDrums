@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class LevelController implements InputProcessor {
 
     public enum ControllerMode {
-        SENSOR, KEYBOARD
+        SENSOR, KEYBOARD, SCREEN_KEYBOARD
     }
 
     private boolean menuMode = false;
@@ -42,29 +42,14 @@ public class LevelController implements InputProcessor {
     }
 
     public void updateLevel() {
-        for (int i = 0; i < level.getBalls().length; i++) {
-            level.getBalls()[i].rotate();
-        }
 
-        for(int j = 0; j < level.getBalls().length; j++) {
-            for (int j2 = 0; j2 < level.getDrums().length; j2++) {
-                if (j2 == j) continue;
-                if (level.getDrums()[j2].getRotationRadius() == level.getBalls()[j].getRotationRadius()) {
-                    level.getDrums()[j2].setBall(level.getBalls()[j]);
-                    break;
-                }
-            }
-        }
+        level.rotateAllBalls();
+
+        checkDrumRadiusEqualsBall();
 
         if (!menuMode) {
-            for (int i = 0; i < level.getDrums().length; i++) {
-                if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
-                    level.getDrums()[i].setDrumColorEqualsBallColor(true);
-                } else {
-                    level.getDrums()[i].setDrumColorEqualsBallColor(false);
-                }
-            }
 
+            checkDrumColorEqualsBallColor();
 
             colorChangeTimer += Gdx.graphics.getDeltaTime();
             currentTimer += Gdx.graphics.getDeltaTime();
@@ -78,7 +63,6 @@ public class LevelController implements InputProcessor {
                 for (int i = 0; i < level.getDrums().length; i++) {
                     if (!level.getDrums()[i].isDrumColorEqualsBallColor()) {
                         gameOver();
-                        System.out.println(i);
                     }
                 }
 
@@ -86,64 +70,97 @@ public class LevelController implements InputProcessor {
             }
 
 
-        level.setPlayTime(currentTimer);
+            level.setPlayTime(currentTimer);
         }
     }
 
     public void processInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            if (ballRadius < level.getRadius().length-1) ballRadius++;
-        }
+        if (controllerMode == ControllerMode.KEYBOARD) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+                if (ballRadius < level.getRadius().length - 1) ballRadius++;
+            }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            if (ballNum < level.getBalls().length-1) {
-                ballNum++;
-                ballRadius = getBallRadiusNum(level.getBalls()[ballNum]);
-                level.getBalls()[ballNum].setPriority(true);
-            } else if (ballNum >= level.getBalls().length-1) {
-                ballNum = 0;
-                ballRadius = getBallRadiusNum(level.getBalls()[ballNum]);
-                level.getBalls()[ballNum].setPriority(true);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+                enlargeBallNum();
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+                reduceBallNum();
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+                if (ballRadius > 0) ballRadius--;
+            }
+
+            for (int i = 0; i < level.getBalls().length; i++) {
+                if (level.getBalls()[i] != level.getBalls()[ballNum]) {
+                    level.getBalls()[i].setPriority(false);
+                } else {
+                    level.getBalls()[i].setPriority(true);
+                }
+
+                level.getBalls()[ballNum].setRotationRadius(level.getRadius()[ballRadius]);
             }
         }
+    }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            if (ballNum > 0) {
-                ballNum--;
-                ballRadius = getBallRadiusNum(level.getBalls()[ballNum]);
-            } else if (ballNum <= 0) {
-                ballNum = level.getBalls().length-1;
-                ballRadius = getBallRadiusNum(level.getBalls()[ballNum]);
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            if (ballRadius > 0) ballRadius--;
-        }
-
-        for (int i = 0; i < level.getBalls().length; i++) {
-            if (level.getBalls()[i] != level.getBalls()[ballNum]) {
-                level.getBalls()[i].setPriority(false);
+    public void checkDrumColorEqualsBallColor() {
+        for (int i = 0; i < level.getDrums().length; i++) {
+            if (ColorUtil.colorEquals(ColorUtil.darkenColor(level.getDrums()[i].getColor(), 0.1f), level.getDrums()[i].getBall().getColor())) {
+                level.getDrums()[i].setDrumColorEqualsBallColor(true);
             } else {
-                level.getBalls()[i].setPriority(true);
+                level.getDrums()[i].setDrumColorEqualsBallColor(false);
             }
-
-            level.getBalls()[ballNum].setRotationRadius(level.getRadius()[ballRadius]);
         }
+    }
+
+    public void checkDrumRadiusEqualsBall() {
+        for (int j = 0; j < level.getBalls().length; j++) {
+            for (int j2 = 0; j2 < level.getDrums().length; j2++) {
+                if (j2 == j) continue;
+                if (level.getDrums()[j2].getRotationRadius() == level.getBalls()[j].getRotationRadius()) {
+                    level.getDrums()[j2].setBall(level.getBalls()[j]);
+                    break;
+                }
+            }
+        }
+    }
+
+
+    public void reduceBallNum() {
+        if (ballNum > 0) {
+            ballNum--;
+            level.getBalls()[ballNum].setPriority(true);
+        } else if (ballNum <= 0) {
+            ballNum = level.getBalls().length-1;
+            level.getBalls()[ballNum].setPriority(true);
+        }
+
+        setBallRadius(level.getBalls()[ballNum]);
+    }
+
+    public void setBallRadius(Ball ball) {
+        ballRadius = getBallRadiusNum(ball);
+    }
+
+    public void enlargeBallNum() {
+        if (ballNum < level.getBalls().length-1) {
+            ballNum++;
+            level.getBalls()[ballNum].setPriority(true);
+        } else if (ballNum > level.getBalls().length) {
+            ballNum = 0;
+            level.getBalls()[ballNum].setPriority(true);
+        }
+
+        setBallRadius(level.getBalls()[ballNum]);
     }
 
     public int getBallRadiusNum(Ball ball) {
         try {
-            if (ball.getRotationRadius() == level.getRadius()[0]) {
-                return 0;
-            }
-
-            if (ball.getRotationRadius() == level.getRadius()[1]) {
-                return 1;
-            }
-
-            if (ball.getRotationRadius() == level.getRadius()[2]) {
-                return 2;
+            for (int i = 0; i < level.getRadius().length; i++) {
+                if (ball.getRotationRadius() == level.getRadius()[i]) {
+                    return i;
+                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
